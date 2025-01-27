@@ -38,13 +38,13 @@ namespace DeadLockApp.ViewModels
             }
         }
 
-        public async Task LoadBuildDetailsAsync(int buildId)
+        public async Task LoadBuildDetailsAsync(int buildId, int characterId)
         {
             try
             {
                 Debug.WriteLine(buildId);
                 var client = new HttpClient();
-                var response = await client.GetStringAsync($"{BuildDetailsApiUrl}{buildId}/builds");
+                var response = await client.GetStringAsync($"{BuildDetailsApiUrl}{characterId}/builds");
 
                 Debug.WriteLine("API Response:");
                 Debug.WriteLine(response);  // Отладочный вывод полученного ответа

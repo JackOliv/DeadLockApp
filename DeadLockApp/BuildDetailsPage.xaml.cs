@@ -4,10 +4,12 @@ namespace DeadLockApp;
 
 [QueryProperty(nameof(BuildId), "buildId")]
 [QueryProperty(nameof(BuildName), "buildName")]
+[QueryProperty(nameof(CharacterId), "characterId")]
 public partial class BuildDetailsPage : ContentPage
 {
     public int BuildId { get; set; }
     public string BuildName { get; set; }
+    public int CharacterId { get; set; }
 
     private readonly BuildDetailsViewModel _viewModel;
 
@@ -21,6 +23,6 @@ public partial class BuildDetailsPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.LoadBuildDetailsAsync(BuildId);
+        await _viewModel.LoadBuildDetailsAsync(BuildId,CharacterId);
     }
 }

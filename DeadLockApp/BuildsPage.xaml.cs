@@ -32,7 +32,7 @@ namespace DeadLockApp
             if (e.CurrentSelection.FirstOrDefault() is Build selectedBuild)
             {
                 // —формируйте строковый маршрут с параметрами
-                string route = $"{nameof(BuildDetailsPage)}?buildId={selectedBuild.Id}&buildName={selectedBuild.Name}";
+                string route = $"{nameof(BuildDetailsPage)}?buildId={selectedBuild.Id}&buildName={selectedBuild.Name}&characterId={CharacterId}";
                 await Shell.Current.GoToAsync(route);
             }
         }
