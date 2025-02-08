@@ -8,7 +8,7 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Image Style="{StaticResource ImgLogo}" Source="logo.png" HorizontalOptions="Start" Margin="0,30,0,0"/>
+            <Image Style="{StaticResource ImgLogo}" Source="logo.png" HorizontalOptions="Center" Margin="0,30,0,0" WidthRequest="350"/>
             <Label Style="{StaticResource LabelStyle}">Компьютерная игра в жанре многопользовательского шутера от третьего лица, разрабатываемая и издаваемая компанией Valve. Сочетает в себе элементы жанров геройского шутера и MOBA.</Label>
 
         </VerticalStackLayout>

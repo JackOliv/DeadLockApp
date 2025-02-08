@@ -8,7 +8,6 @@
     TabBarDisabledColor="#ada58c"
     TabBarTitleColor="#efdfc0">
 
-    <!-- Страница для логина -->
    
     <TabBar>
         <Tab Title="Главная" Icon="home_icon.png">

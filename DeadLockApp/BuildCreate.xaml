@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DeadLockApp.ViewModels"
+             x:Class="DeadLockApp.BuildCreate"
+             BackgroundColor="#2b2923">
+    <ContentPage.BindingContext>
+        <vm:BuildCreateViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <!-- Заголовок -->
+            <Entry Text="{Binding BuildName}" Placeholder="Введите название билда"
+                   FontSize="24" TextColor="#efdfc0" HorizontalOptions="Center"
+                   BackgroundColor="Transparent" />
+
+            <Button Text="Сохранить билд" Command="{Binding SaveBuildCommand}" BackgroundColor="#35b093" TextColor="White" />
+
+            <!-- Отображение категорий -->
+            <Label Text="Начало" FontSize="24" TextColor="#35b093" Margin="0,10,0,5" />
+            <FlexLayout Wrap="Wrap" JustifyContent="Start">
+                <BindableLayout.ItemsSource>
+                    <x:Binding Path="StartItems" />
+                </BindableLayout.ItemsSource>
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120"
+                               BackgroundColor="#3e3b36" GestureRecognizers="{Binding RemoveCommand}">
+                            <VerticalStackLayout>
+                                <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" />
+                                <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+            <Button Text="Добавить предмет" Command="{Binding AddStartItemCommand}" BackgroundColor="#3e3b36" TextColor="White" />
+
+            <Label Text="Середина" FontSize="24" TextColor="#35b093" Margin="0,10,0,5" />
+            <FlexLayout Wrap="Wrap" JustifyContent="Start">
+                <BindableLayout.ItemsSource>
+                    <x:Binding Path="MiddleItems" />
+                </BindableLayout.ItemsSource>
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120"
+                               BackgroundColor="#3e3b36" GestureRecognizers="{Binding RemoveCommand}">
+                            <VerticalStackLayout>
+                                <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" />
+                                <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+            <Button Text="Добавить предмет" Command="{Binding AddMiddleItemCommand}" BackgroundColor="#3e3b36" TextColor="White" />
+
+            <Label Text="Конец" FontSize="24" TextColor="#35b093" Margin="0,10,0,5" />
+            <FlexLayout Wrap="Wrap" JustifyContent="Start">
+                <BindableLayout.ItemsSource>
+                    <x:Binding Path="EndItems" />
+                </BindableLayout.ItemsSource>
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120"
+                               BackgroundColor="#3e3b36" GestureRecognizers="{Binding RemoveCommand}">
+                            <VerticalStackLayout>
+                                <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" />
+                                <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+            <Button Text="Добавить предмет" Command="{Binding AddEndItemCommand}" BackgroundColor="#3e3b36" TextColor="White" />
+
+            <Label Text="Ситуативные" FontSize="24" TextColor="#35b093" Margin="0,10,0,5" />
+            <FlexLayout Wrap="Wrap" JustifyContent="Start">
+                <BindableLayout.ItemsSource>
+                    <x:Binding Path="SituationalItems" />
+                </BindableLayout.ItemsSource>
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120"
+                               BackgroundColor="#3e3b36" GestureRecognizers="{Binding RemoveCommand}">
+                            <VerticalStackLayout>
+                                <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" />
+                                <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" HorizontalOptions="Center"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </FlexLayout>
+            <Button Text="Добавить предмет" Command="{Binding AddSituationalItemCommand}" BackgroundColor="#3e3b36" TextColor="White" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
