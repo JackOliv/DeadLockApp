@@ -35,7 +35,7 @@ namespace DeadLockApp.ViewModels
         }
 
         public ICommand ChangeCategoryCommand { get; } // Команда для изменения категории
-
+        public ICommand ShowItemDetailsCommand { get; }
         private string _selectedCategory; // Выбранная категория
         public string SelectedCategory
         {
@@ -53,12 +53,13 @@ namespace DeadLockApp.ViewModels
         // Конструктор, инициализирующий команду и загружающий данные
         public ItemsViewModel()
         {
+            ShowItemDetailsCommand = new Command<int>(async (itemId) => await OpenItemDetails(itemId));
             ChangeCategoryCommand = new Command<string>(ChangeCategory); // Инициализация команды изменения категории
             LoadItemsAsync(); // Загрузка предметов при инициализации
         }
 
         // Асинхронный метод для получения данных о предметах с API
-        private async Task<List<Item>> FetchItemsAsync()
+        public async Task<List<Item>> FetchItemsAsync()
         {
             try
             {
@@ -108,6 +109,7 @@ namespace DeadLockApp.ViewModels
             OnPropertyChanged(nameof(TierThreeItems));
             OnPropertyChanged(nameof(TierFourItems));
         }
+        
 
         // Метод для получения идентификатора типа предмета по категории
         private int GetTypeIdFromCategory(string category)
@@ -122,7 +124,7 @@ namespace DeadLockApp.ViewModels
         }
 
         // Асинхронный метод для загрузки предметов и их обработки
-        private async void LoadItemsAsync()
+        public async void LoadItemsAsync()
         {
             var items = await FetchItemsAsync(); // Получаем предметы с API
 
@@ -143,5 +145,20 @@ namespace DeadLockApp.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); // Вызываем событие изменения свойства
         }
+
+
+  
+
+
+        private async Task OpenItemDetails(int itemId)
+        {
+            Debug.WriteLine($"Открываю предмет с ID: {itemId}");
+
+            if (itemId > 0)
+            {
+                await Shell.Current.GoToAsync($"ItemDetailsPage?itemId={itemId}", true);
+            }
+        }
     }
+
 }

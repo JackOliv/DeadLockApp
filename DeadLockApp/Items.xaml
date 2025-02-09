@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DeadLockApp.ViewModels"
              x:Class="DeadLockApp.Items"
+             x:Name="ItemsPage"
              BackgroundColor="#2b2923">
     <ContentPage.BindingContext>
         <vm:ItemsViewModel />
@@ -65,15 +66,18 @@
                             <DataTemplate>
                                 <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120" BackgroundColor="#3e3b36">
                                     <VerticalStackLayout>
-                                        <!-- Изображение -->
                                         <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFill" />
-                                        <!-- Цена -->
                                         <HorizontalStackLayout HorizontalOptions="Center">
                                             <Image Source="souls.png" WidthRequest="10" HeightRequest="16" />
                                             <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" />
                                         </HorizontalStackLayout>
                                     </VerticalStackLayout>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ItemsPage}, Path=BindingContext.ShowItemDetailsCommand}"
+                              CommandParameter="{Binding Id}" />
+                                    </Frame.GestureRecognizers>
                                 </Frame>
+
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </FlexLayout>
@@ -88,15 +92,18 @@
                         <DataTemplate>
                                 <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120" BackgroundColor="#3e3b36">
                                     <VerticalStackLayout>
-                                        <!-- Изображение -->
                                         <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFill" />
-                                        <!-- Цена -->
                                         <HorizontalStackLayout HorizontalOptions="Center">
                                             <Image Source="souls.png" WidthRequest="10" HeightRequest="16" />
                                             <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" />
                                         </HorizontalStackLayout>
                                     </VerticalStackLayout>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ItemsPage}, Path=BindingContext.ShowItemDetailsCommand}"
+                              CommandParameter="{Binding Id}" />
+                                    </Frame.GestureRecognizers>
                                 </Frame>
+
                             </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </FlexLayout>
@@ -111,15 +118,18 @@
                         <DataTemplate>
                                 <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120" BackgroundColor="#3e3b36">
                                     <VerticalStackLayout>
-                                        <!-- Изображение -->
                                         <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFill" />
-                                        <!-- Цена -->
                                         <HorizontalStackLayout HorizontalOptions="Center">
                                             <Image Source="souls.png" WidthRequest="10" HeightRequest="16" />
                                             <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" />
                                         </HorizontalStackLayout>
                                     </VerticalStackLayout>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ItemsPage}, Path=BindingContext.ShowItemDetailsCommand}"
+                              CommandParameter="{Binding Id}" />
+                                    </Frame.GestureRecognizers>
                                 </Frame>
+
                             </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </FlexLayout>
@@ -134,15 +144,18 @@
                         <DataTemplate>
                                 <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120" BackgroundColor="#3e3b36">
                                     <VerticalStackLayout>
-                                        <!-- Изображение -->
                                         <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFill" />
-                                        <!-- Цена -->
                                         <HorizontalStackLayout HorizontalOptions="Center">
                                             <Image Source="souls.png" WidthRequest="10" HeightRequest="16" />
                                             <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" />
                                         </HorizontalStackLayout>
                                     </VerticalStackLayout>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ItemsPage}, Path=BindingContext.ShowItemDetailsCommand}"
+                              CommandParameter="{Binding Id}" />
+                                    </Frame.GestureRecognizers>
                                 </Frame>
+
                             </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </FlexLayout>

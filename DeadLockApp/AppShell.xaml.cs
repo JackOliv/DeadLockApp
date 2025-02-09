@@ -7,11 +7,11 @@ namespace DeadLockApp
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute("LoginPage", typeof(LoginPage));
-            Routing.RegisterRoute("MainPage", typeof(MainPage));
-            Routing.RegisterRoute("builds", typeof(BuildsPage));
-            Routing.RegisterRoute(nameof(BuildDetailsPage), typeof(BuildDetailsPage));
+            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
             Routing.RegisterRoute(nameof(BuildsPage), typeof(BuildsPage));
+            Routing.RegisterRoute(nameof(ItemDetailsPage), typeof(ItemDetailsPage));
+            Routing.RegisterRoute(nameof(BuildDetailsPage), typeof(BuildDetailsPage));
         }
     }
 }

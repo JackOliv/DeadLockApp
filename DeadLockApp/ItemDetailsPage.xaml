@@ -1,0 +1,20 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DeadLockApp.ViewModels"
+             x:Class="DeadLockApp.ItemDetailsPage"
+             BackgroundColor="#2b2923">
+    <ContentPage.BindingContext>
+        <vm:ItemDetailsViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout Padding="20">
+        <Image Source="{Binding FullImagePath}" WidthRequest="200" HeightRequest="200" Aspect="AspectFill"/>
+        <Label Text="{Binding SelectedItem.Name}" FontSize="24" TextColor="White"/>
+        <Label Text="{Binding SelectedItem.Description}" FontSize="16" TextColor="Gray"/>
+        <HorizontalStackLayout>
+            <Image Source="souls.png" WidthRequest="20" HeightRequest="20"/>
+            <Label Text="{Binding SelectedItem.Cost}" FontSize="18" TextColor="#47fdd3"/>
+        </HorizontalStackLayout>
+
+    </VerticalStackLayout>
+</ContentPage>
