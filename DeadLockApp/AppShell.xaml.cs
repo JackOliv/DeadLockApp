@@ -12,6 +12,8 @@ namespace DeadLockApp
             Routing.RegisterRoute(nameof(BuildsPage), typeof(BuildsPage));
             Routing.RegisterRoute(nameof(ItemDetailsPage), typeof(ItemDetailsPage));
             Routing.RegisterRoute(nameof(BuildDetailsPage), typeof(BuildDetailsPage));
+            Routing.RegisterRoute(nameof(BuildCreatePage), typeof(BuildCreatePage));
+            Routing.RegisterRoute(nameof(ItemSelectionPage), typeof(ItemSelectionPage));
         }
     }
 }

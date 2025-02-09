@@ -50,11 +50,12 @@
         <!-- Кнопка для создания нового билда -->
         <Button x:Name="CreateBuildButton"
         Text="Создать новый билд"
-        Command="{Binding CreateBuildCommand}"
+        Clicked="OnCreateBuild"
         BackgroundColor="#453f34"
         TextColor="#efdfc0"
         CornerRadius="5"
         Margin="0,20,0,0"/>
+
 
     </VerticalStackLayout>
 </ContentPage>
