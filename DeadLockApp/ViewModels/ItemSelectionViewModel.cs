@@ -35,8 +35,9 @@ namespace DeadLockApp.ViewModels
         }
 
         public ICommand ChangeCategoryCommand { get; } // Команда для изменения категории
-        public ICommand ShowItemDetailsCommand { get; }
         private string _selectedCategory; // Выбранная категория
+        public ICommand SelectItemCommand { get; }
+
         public string SelectedCategory
         {
             get => _selectedCategory;
@@ -51,9 +52,9 @@ namespace DeadLockApp.ViewModels
         }
 
         // Конструктор, инициализирующий команду и загружающий данные
-        public ItemSelectionViewModel()
+        public ItemSelectionViewModel() 
         {
-            ShowItemDetailsCommand = new Command<int>(async (itemId) => await OpenItemDetails(itemId));
+            SelectItemCommand = new Command<Item>(SelectItem);
             ChangeCategoryCommand = new Command<string>(ChangeCategory); // Инициализация команды изменения категории
             LoadItemsAsync(); // Загрузка предметов при инициализации
         }
@@ -145,15 +146,25 @@ namespace DeadLockApp.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); // Вызываем событие изменения свойства
         }
-
-        private async Task OpenItemDetails(int itemId)
+        private async void SelectItem(Item item)
         {
-            Debug.WriteLine($"Открываю предмет с ID: {itemId}");
+            if (item == null) return;
 
-            if (itemId > 0)
+            if (Shell.Current.CurrentPage is ItemSelectionPage selectionPage)
             {
-                await Shell.Current.GoToAsync($"ItemDetailsPage?itemId={itemId}", true);
+                int partId = selectionPage.PartId;
+
+                // Получаем ViewModel страницы создания билда
+                if (Shell.Current.Navigation.NavigationStack.FirstOrDefault(p => p is BuildCreatePage) is BuildCreatePage buildPage)
+                {
+                    if (buildPage.BindingContext is BuildCreateViewModel buildViewModel)
+                    {
+                        buildViewModel.AddItemToBuild(item, partId);
+                    }
+                }
             }
+
+            await Shell.Current.Navigation.PopAsync(); // Закрываем страницу выбора предмета
         }
     }
 

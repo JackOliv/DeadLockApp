@@ -11,7 +11,7 @@ namespace DeadLockApp
             InitializeComponent();
         }
         protected override void OnAppearing()
-        {
+        {   
             base.OnAppearing();
         }
     }
