@@ -11,7 +11,7 @@ namespace DeadLockApp.ViewModels
 {
     public class BuildsViewModel : BaseViewModel
     {
-        private const string ApiUrl = "http://course-project-4/api/character/{0}/builds"; // URL для API, который предоставляет информацию о билдах
+        private const string ApiUrl = "http://192.168.2.20/api/character/{0}/builds"; // URL для API, который предоставляет информацию о билдах
 
         public ObservableCollection<Build> Builds { get; set; } = new(); // Коллекция билдов для привязки
         public Build SelectedBuild { get; set; } // Выбранный билд

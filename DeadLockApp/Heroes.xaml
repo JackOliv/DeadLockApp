@@ -4,7 +4,7 @@
              x:Class="DeadLockApp.Heroes" 
              BackgroundColor="#2b2923">
     <ScrollView HorizontalScrollBarVisibility="Never">
-        <StackLayout Padding="10">
+        <StackLayout Padding="10" >
             <Label Text="Герои Deadlock" 
                    Style="{StaticResource HeaderStyle}" 
                    HorizontalOptions="Center" />
@@ -12,15 +12,14 @@
                 ItemsSource="{Binding Characters}"
                 SelectionChanged="OnCharacterSelected"
                 SelectionMode="Single"
-                WidthRequest="394" 
-                HorizontalOptions="Center" 
-                Margin="8,0,0,0">
+                WidthRequest="380" 
+                HorizontalOptions="Center">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border Padding="5">
+                        <Border Padding="5" BackgroundColor="#2b2a25">
                             <Image Source="{Binding Image}" 
                        Style="{StaticResource Img}" />
                         </Border>

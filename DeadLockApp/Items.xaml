@@ -64,9 +64,9 @@
                         </BindableLayout.ItemsSource>
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
-                                <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120" BackgroundColor="#3e3b36">
+                                <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="125" BackgroundColor="#3e3b36">
                                     <VerticalStackLayout>
-                                        <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="Fill" />
+                                        <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFit" />
                                         <HorizontalStackLayout HorizontalOptions="Center">
                                             <Image Source="souls.png" WidthRequest="10" HeightRequest="16" />
                                             <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" />
@@ -90,9 +90,9 @@
                     </BindableLayout.ItemsSource>
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                                <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120" BackgroundColor="#3e3b36">
+                                <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="125" BackgroundColor="#3e3b36">
                                     <VerticalStackLayout>
-                                        <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="Fill" />
+                                        <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFit" />
                                         <HorizontalStackLayout HorizontalOptions="Center">
                                             <Image Source="souls.png" WidthRequest="10" HeightRequest="16" />
                                             <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" />
@@ -116,9 +116,9 @@
                     </BindableLayout.ItemsSource>
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                                <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120" BackgroundColor="#3e3b36">
+                                <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="125" BackgroundColor="#3e3b36">
                                     <VerticalStackLayout>
-                                        <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="Fill" />
+                                        <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFit" />
                                         <HorizontalStackLayout HorizontalOptions="Center">
                                             <Image Source="souls.png" WidthRequest="10" HeightRequest="16" />
                                             <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" />
@@ -142,9 +142,9 @@
                     </BindableLayout.ItemsSource>
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                                <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="120" BackgroundColor="#3e3b36">
+                                <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="125" BackgroundColor="#3e3b36">
                                     <VerticalStackLayout>
-                                        <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="Fill" />
+                                        <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFit" />
                                         <HorizontalStackLayout HorizontalOptions="Center">
                                             <Image Source="souls.png" WidthRequest="10" HeightRequest="16" />
                                             <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" />

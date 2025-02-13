@@ -23,7 +23,7 @@ namespace DeadLockApp.ViewModels
                 OnPropertyChanged(nameof(FullImagePath));
             }
         }
-        public string FullImagePath => SelectedItem != null ? $"http://course-project-4/storage/{SelectedItem.Image}" : string.Empty;
+        public string FullImagePath => SelectedItem != null ? $"http://192.168.2.20/storage/{SelectedItem.Image}" : string.Empty;
         public string Name => SelectedItem?.Name;
         public string Description => SelectedItem?.Description;
         public string Image => SelectedItem?.Image;

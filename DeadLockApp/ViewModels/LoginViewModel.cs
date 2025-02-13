@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Text.Json.Serialization;
 namespace DeadLockApp.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public partial class LoginViewModel : BaseViewModel
     {
         private string _username;
         public string Username
@@ -88,8 +88,8 @@ namespace DeadLockApp.ViewModels
             var isSuccess = await AuthenticateUserAsync(Username, Password);
             if (isSuccess)
             {
-                // Перенаправление в основное приложение
-                await Shell.Current.GoToAsync("MainPage");
+                // Перенаправление на BuildCreatePage
+                await Shell.Current.GoToAsync(nameof(BuildCreatePage)); // Переход на BuildCreatePage
                 IsErrorVisible = true;
                 ErrorMessage = "Успешно вошел";
             }
@@ -104,7 +104,7 @@ namespace DeadLockApp.ViewModels
             try
             {
                 using var httpClient = new HttpClient();
-                var url = "http://course-project-4/public/api/login";
+                var url = "http://192.168.2.20/public/api/login";
 
                 // Формируем тело запроса
                 var content = new StringContent(
@@ -132,15 +132,18 @@ namespace DeadLockApp.ViewModels
 
                     if (result != null && !string.IsNullOrEmpty(result.Token))
                     {
-                        // Сохраняем токен
+                        // Сохраняем токен и роль
                         await SecureStorage.SetAsync("auth_token", result.Token);
+                        await SecureStorage.SetAsync("role_code", result.User.RoleCode); // Сохраняем role_code
+                        await SecureStorage.SetAsync("username", result.User.Name); // Сохраняем имя пользователя
+
                         return true;
                     }
                     else
                     {
-                        // Если токен не найден
-                        ErrorMessage = "Ошибка: Токен отсутствует в ответе.";
-                        Debug.WriteLine("Ошибка: Токен отсутствует в ответе.");
+                        // Если токен или данные пользователя отсутствуют
+                        ErrorMessage = "Ошибка: Токен или данные пользователя отсутствуют в ответе.";
+                        Debug.WriteLine("Ошибка: Токен или данные пользователя отсутствуют в ответе.");
                     }
                 }
                 else
@@ -163,15 +166,24 @@ namespace DeadLockApp.ViewModels
 
 
         // Класс для десериализации ответа
+        // Класс для десериализации ответа
         public class LoginResponse
         {
             [JsonPropertyName("token")]
             public string Token { get; set; }
 
-            [JsonPropertyName("message")]
-            public string Message { get; set; }
-        }
+            [JsonPropertyName("user")]
+            public UserDetails User { get; set; } // Изменено на UserDetails для предотвращения конфликта
 
+            public class UserDetails // Переименовано из User
+            {
+                [JsonPropertyName("name")]
+                public string Name { get; set; } // Имя пользователя
+
+                [JsonPropertyName("role_code")]
+                public string RoleCode { get; set; } // Роль пользователя
+            }
+        }
 
 
     }

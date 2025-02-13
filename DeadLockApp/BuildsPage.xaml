@@ -8,8 +8,8 @@
     <ContentPage.BindingContext>
         <vm:BuildsViewModel />
     </ContentPage.BindingContext>
-
-    <VerticalStackLayout Padding="10">
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
         <!-- Заголовок -->
         <Label x:Name="PageTitle"
                Style="{StaticResource HeaderStyle}"
@@ -26,9 +26,8 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate >
-                    <VerticalStackLayout Margin="0,5,0,0">
-                        
-                    <Frame Margin="5" BorderColor="#ada58c" Background="#39352a" >
+                        <VerticalStackLayout Margin="0,5,0,0">
+                            <Frame Margin="5" BorderColor="#ada58c" Background="#39352a" >
                         <HorizontalStackLayout>
                             <Label Text="{Binding Name}"
                            FontSize="18"
@@ -58,4 +57,5 @@
 
 
     </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -10,7 +10,7 @@ namespace DeadLockApp.ViewModels
 {
     public class BuildDetailsViewModel : BaseViewModel
     {
-        private const string BuildDetailsApiUrl = "http://course-project-4/api/character/"; // URL для API
+        private const string BuildDetailsApiUrl = "http://192.168.2.20/api/character/"; // URL для API
 
         public ObservableCollection<Item> StartItems { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Item> MiddleItems { get; set; } = new ObservableCollection<Item>();
@@ -81,7 +81,7 @@ namespace DeadLockApp.ViewModels
                             if (itemDetail != null)
                             {
                                 Console.WriteLine($"Item found: {itemDetail.Name}, assigning to Part ID: {item.PartId}");
-                                itemDetail.Image = $"http://course-project-4/public/storage/{itemDetail.Image}";
+                                itemDetail.Image = $"http://192.168.2.20/public/storage/{itemDetail.Image}";
                                 switch (item.PartId)
                                 {
                                     case 1: StartItems.Add(itemDetail); break;
@@ -116,7 +116,7 @@ namespace DeadLockApp.ViewModels
         private async Task<List<Item>> GetItemsAsync()
         {
             var client = new HttpClient();
-            var response = await client.GetStringAsync("http://course-project-4/api/items"); // URL для API
+            var response = await client.GetStringAsync("http://192.168.2.20/api/items"); // URL для API
             Debug.WriteLine("Items API Response:");
             Debug.WriteLine(response); // Отладочный вывод ответа
 
