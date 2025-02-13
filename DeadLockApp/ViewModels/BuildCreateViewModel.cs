@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.Json;
+using System.Text;
 using System.Windows.Input;
 using DeadLockApp.Models;
 
@@ -67,8 +69,73 @@ namespace DeadLockApp.ViewModels
 
         private async void SaveBuild()
         {
-            // Логика сохранения билда через API
-            await Application.Current.MainPage.DisplayAlert("Успех", "Билд сохранен!", "Ок");
+            try
+            {
+                if (string.IsNullOrEmpty(BuildName))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Ошибка", "Введите название билда.", "Ок");
+                    return;
+                }
+
+                var token = await SecureStorage.GetAsync("auth_token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Ошибка", "Не найден токен авторизации.", "Ок");
+                    return;
+                }
+
+                var buildRequest = new
+                {
+                    name = BuildName,
+                    character_id = 1, // Пока что фиксированный ID персонажа, можно изменить
+                    items = GetItemsList()
+                };
+
+                using var httpClient = new HttpClient();
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+                var content = new StringContent(
+                    JsonSerializer.Serialize(buildRequest),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                var response = await httpClient.PostAsync("http://192.168.2.20/api/builds/create", content);
+                var responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Успех", "Билд сохранен!", "Ок");
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Ошибка", $"Ошибка сохранения билда: {responseContent}", "Ок");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Ошибка", $"Ошибка запроса: {ex.Message}", "Ок");
+            }
         }
+        private List<object> GetItemsList()
+        {
+            var items = new List<object>();
+
+            void AddItems(IEnumerable<Item> collection, int partId)
+            {
+                foreach (var item in collection)
+                {
+                    items.Add(new { item_id = item.Id, part = partId });
+                }
+            }
+
+            AddItems(StartItems, 1);
+            AddItems(MiddleItems, 2);
+            AddItems(EndItems, 3);
+            AddItems(SituationalItems, 4);
+
+            return items;
+        }
+
     }
 }

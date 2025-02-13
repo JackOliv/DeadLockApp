@@ -40,8 +40,10 @@ namespace DeadLockApp
         }
         private async void OnCreateBuild(object sender, EventArgs e)
         {
-            if (Data.CurrentUser != null)
+            var token = await SecureStorage.GetAsync("auth_token");
+            if (token != null)
             {
+                Debug.WriteLine(token);
                 string route = $"{nameof(BuildCreatePage)}?characterId={CharacterId}";
                 await Shell.Current.GoToAsync(route);
             }

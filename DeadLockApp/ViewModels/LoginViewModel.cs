@@ -132,7 +132,6 @@ namespace DeadLockApp.ViewModels
                 {
                     await SecureStorage.SetAsync("role_code", result.User.RoleCode ?? "");
                     await SecureStorage.SetAsync("username", result.User.Name ?? "");
-                    Data.CurrentUser = result.User; // Сохраняем пользователя
                 }
 
                 return true;
