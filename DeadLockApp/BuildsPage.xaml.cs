@@ -32,16 +32,23 @@ namespace DeadLockApp
         {
             if (e.CurrentSelection.FirstOrDefault() is Build selectedBuild)
             {
-                // —формируйте строковый маршрут с параметрами
-                
-                string route = $"{nameof(BuildDetailsPage)}?buildId={selectedBuild.Id}&buildName={selectedBuild.Name}&characterId={CharacterId}";
-                await Shell.Current.GoToAsync(route);
+               
+                    string route = $"{nameof(BuildDetailsPage)}?buildId={selectedBuild.Id}&buildName={selectedBuild.Name}&characterId={CharacterId}";
+                    await Shell.Current.GoToAsync(route);
+               
             }
         }
         private async void OnCreateBuild(object sender, EventArgs e)
         {
-            string route = $"{nameof(BuildCreatePage)}?characterId={CharacterId}";
-            await Shell.Current.GoToAsync(route);
+            if (Data.CurrentUser != null)
+            {
+                string route = $"{nameof(BuildCreatePage)}?characterId={CharacterId}";
+                await Shell.Current.GoToAsync(route);
+            }
+            else
+            {
+                await Shell.Current.GoToAsync(nameof(LoginPage));
+            }
         }
 
 

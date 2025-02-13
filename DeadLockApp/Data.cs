@@ -10,5 +10,6 @@ namespace DeadLockApp.ViewModels
     public static class Data
     {
         public static Character CurrentCharacter { get; set; }
+        public static LoginViewModel.LoginResponse.UserDetails CurrentUser { get; set; }
     }
 }

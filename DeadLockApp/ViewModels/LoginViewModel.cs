@@ -98,7 +98,6 @@ namespace DeadLockApp.ViewModels
                 IsErrorVisible = true;
             }
         }
-
         private async Task<bool> AuthenticateUserAsync(string login, string password)
         {
             try
@@ -106,54 +105,37 @@ namespace DeadLockApp.ViewModels
                 using var httpClient = new HttpClient();
                 var url = "http://192.168.2.20/public/api/login";
 
-                // Формируем тело запроса
                 var content = new StringContent(
                     JsonSerializer.Serialize(new { login, password }),
                     Encoding.UTF8,
                     "application/json"
                 );
 
-                // Отправляем POST-запрос
                 var response = await httpClient.PostAsync(url, content);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
-                // Логирование для диагностики
                 Debug.WriteLine($"Response StatusCode: {response.StatusCode}");
-                Debug.WriteLine($"Response ReasonPhrase: {response.ReasonPhrase}");
                 Debug.WriteLine($"Response Content: {responseContent}");
 
-                if (response.IsSuccessStatusCode)
+                var result = JsonSerializer.Deserialize<LoginResponse>(responseContent);
+
+                if (result == null || string.IsNullOrEmpty(result.Token))
                 {
-                    // Десериализация ответа
-                    var result = JsonSerializer.Deserialize<LoginResponse>(responseContent);
-
-                    // Логирование результата десериализации
-                    Debug.WriteLine($"Result: {JsonSerializer.Serialize(result)}");
-
-                    if (result != null && !string.IsNullOrEmpty(result.Token))
-                    {
-                        // Сохраняем токен и роль
-                        await SecureStorage.SetAsync("auth_token", result.Token);
-                        await SecureStorage.SetAsync("role_code", result.User.RoleCode); // Сохраняем role_code
-                        await SecureStorage.SetAsync("username", result.User.Name); // Сохраняем имя пользователя
-
-                        return true;
-                    }
-                    else
-                    {
-                        // Если токен или данные пользователя отсутствуют
-                        ErrorMessage = "Ошибка: Токен или данные пользователя отсутствуют в ответе.";
-                        Debug.WriteLine("Ошибка: Токен или данные пользователя отсутствуют в ответе.");
-                    }
-                }
-                else
-                {
-                    // Если статус ответа не успешный
-                    ErrorMessage = "Ошибка: Статус-код ответа не успешный.";
-                    Debug.WriteLine("Ошибка: Статус-код ответа не успешный.");
+                    ErrorMessage = "Ошибка: Некорректный ответ сервера.";
+                    Debug.WriteLine(ErrorMessage);
+                    return false;
                 }
 
-                return false;
+                await SecureStorage.SetAsync("auth_token", result.Token);
+
+                if (result.User != null) // Проверяем, есть ли user
+                {
+                    await SecureStorage.SetAsync("role_code", result.User.RoleCode ?? "");
+                    await SecureStorage.SetAsync("username", result.User.Name ?? "");
+                    Data.CurrentUser = result.User; // Сохраняем пользователя
+                }
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -163,9 +145,6 @@ namespace DeadLockApp.ViewModels
             }
         }
 
-
-
-        // Класс для десериализации ответа
         // Класс для десериализации ответа
         public class LoginResponse
         {
@@ -173,15 +152,15 @@ namespace DeadLockApp.ViewModels
             public string Token { get; set; }
 
             [JsonPropertyName("user")]
-            public UserDetails User { get; set; } // Изменено на UserDetails для предотвращения конфликта
+            public UserDetails? User { get; set; } // Теперь может быть null
 
-            public class UserDetails // Переименовано из User
+            public class UserDetails
             {
                 [JsonPropertyName("name")]
-                public string Name { get; set; } // Имя пользователя
+                public string Name { get; set; }
 
                 [JsonPropertyName("role_code")]
-                public string RoleCode { get; set; } // Роль пользователя
+                public string RoleCode { get; set; }
             }
         }
 
