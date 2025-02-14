@@ -127,13 +127,6 @@ namespace DeadLockApp.ViewModels
                 }
 
                 await SecureStorage.SetAsync("auth_token", result.Token);
-
-                if (result.User != null) // Проверяем, есть ли user
-                {
-                    await SecureStorage.SetAsync("role_code", result.User.RoleCode ?? "");
-                    await SecureStorage.SetAsync("username", result.User.Name ?? "");
-                }
-
                 return true;
             }
             catch (Exception ex)
