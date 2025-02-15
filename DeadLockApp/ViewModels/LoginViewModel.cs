@@ -127,6 +127,24 @@ namespace DeadLockApp.ViewModels
                 }
 
                 await SecureStorage.SetAsync("auth_token", result.Token);
+
+                if (result.User != null) // Проверяем, есть ли user
+                {
+                    await SecureStorage.SetAsync("role_code", result.User.RoleCode ?? "");
+                    await SecureStorage.SetAsync("username", result.User.Name ?? "");
+                    var testValue = await SecureStorage.GetAsync("username");
+                    Debug.WriteLine($"SecureStorage Test Value: {testValue}");
+                    Debug.WriteLine($"User.Name: {result.User?.Name}");
+                    Debug.WriteLine($"User.RoleCode: {result.User?.RoleCode}");
+                    await SecureStorage.SetAsync("test_key", "test_value");
+                    var storedValue = await SecureStorage.GetAsync("test_key");
+                    Debug.WriteLine($"Stored test_key: {storedValue}");
+
+                }
+                else
+                {
+                    Debug.WriteLine($"Penis");
+                }
                 return true;
             }
             catch (Exception ex)

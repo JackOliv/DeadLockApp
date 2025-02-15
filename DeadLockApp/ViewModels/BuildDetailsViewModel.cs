@@ -49,7 +49,15 @@ namespace DeadLockApp.ViewModels
         }
 
 
-
+        public string BuildName
+        {
+            get => _buildName;
+            set
+            {
+                _buildName = value;
+                OnPropertyChanged(nameof(BuildName));
+            }
+        }
 
         private string _buildName;
         private string _buildAuthor;
@@ -66,15 +74,13 @@ namespace DeadLockApp.ViewModels
             }
         }
 
-        public string BuildName
+        private Build _currentBuild;
+        public Build CurrentBuild
         {
-            get => _buildName;
-            set
-            {
-                _buildName = value;
-                OnPropertyChanged(nameof(BuildName));
-            }
+            get => _currentBuild;
+            set => SetProperty(ref _currentBuild, value);
         }
+
 
         public string BuildAuthor
         {
@@ -87,15 +93,21 @@ namespace DeadLockApp.ViewModels
         }
 
         public ICommand DeleteBuildCommand { get; }
+        public ICommand EditBuildCommand { get; }
 
         public BuildDetailsViewModel()
         {
-            // Инициализация команды удаления
-
             DeleteBuildCommand = new Command(async () => await DeleteBuildAsync());
+            EditBuildCommand = new Command(async () => await EditBuildAsync());
+        }
+        private bool _isAuthor;
+        public bool IsAuthor
+        {
+            get => _isAuthor;
+            set => SetProperty(ref _isAuthor, value);
         }
 
-        public async Task LoadBuildDetailsAsync(int buildId)
+        public async Task LoadBuildDetailsAsync(int characterdId, int buildId)
         {
             try
             {
@@ -103,8 +115,7 @@ namespace DeadLockApp.ViewModels
                 SelectedBuildId = buildId;
 
                 var client = new HttpClient();
-                var response = await client.GetStringAsync($"{BuildDetailsApiUrl}{buildId}/builds");
-
+                var response = await client.GetStringAsync($"{BuildDetailsApiUrl}{characterdId}/builds");
                 Debug.WriteLine("API Response:");
                 Debug.WriteLine(response);  // Отладочный вывод полученного ответа
 
@@ -115,9 +126,20 @@ namespace DeadLockApp.ViewModels
                     var build = data.Builds.FirstOrDefault(b => b.Id == buildId);
                     if (build != null)
                     {
+                        CurrentBuild = build;
                         BuildName = build.Name;
                         BuildAuthor = build.Author;
+                        var currentUserId = await SecureStorage.GetAsync("username");
 
+                        // Проверяем, совпадает ли ID автора билда с текущим пользователем
+                        if (build.Author.ToString() == currentUserId || currentUserId == "Admin User")
+                        {
+                            IsAuthor = true;
+                        }
+                        else
+                        {
+                            IsAuthor = false;
+                        }
                         StartItems.Clear();
                         MiddleItems.Clear();
                         EndItems.Clear();
@@ -149,6 +171,16 @@ namespace DeadLockApp.ViewModels
             }
         }
 
+        private async Task EditBuildAsync()
+        {
+            if (CurrentBuild != null)
+            {
+                string serializedBuild = JsonSerializer.Serialize(CurrentBuild);
+                await Shell.Current.GoToAsync($"{nameof(BuildEditPage)}?build={Uri.EscapeDataString(serializedBuild)}");
+            }
+        }
+
+
         private async Task DeleteBuildAsync()
         {
             try
@@ -160,43 +192,43 @@ namespace DeadLockApp.ViewModels
                 if (token != null)
                 {
 
-                    // Проверка, что токен существует
-                    if (string.IsNullOrEmpty(token))
-                    {
-                        await Application.Current.MainPage.DisplayAlert("Ошибка", "Не удалось найти токен авторизации. Пожалуйста, войдите в систему.", "OK");
-                        return;
-                    }
+                // Проверка, что токен существует
+                if (string.IsNullOrEmpty(token))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Ошибка", "Не удалось найти токен авторизации. Пожалуйста, войдите в систему.", "OK");
+                    return;
+                }
 
-                    // Добавляем токен в заголовки запроса
-                    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                // Добавляем токен в заголовки запроса
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
-                    // Формируем правильный URL для удаления билда
-                    var deleteUrl = $"http://192.168.2.20/api/builds/{SelectedBuildId}";
+                // Формируем правильный URL для удаления билда
+                var deleteUrl = $"http://192.168.2.20/api/builds/{SelectedBuildId}";
 
-                    // Отправляем запрос DELETE
-                    var response = await client.DeleteAsync(deleteUrl);
+                // Отправляем запрос DELETE
+                var response = await client.DeleteAsync(deleteUrl);
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        Debug.WriteLine($"Build {SelectedBuildId} deleted successfully.");
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine($"Build {SelectedBuildId} deleted successfully.");
 
-                        // Показать успешное сообщение
-                        await Application.Current.MainPage.DisplayAlert("Успех", "Сборка успешно удалена", "OK");
+                    // Показать успешное сообщение
+                    await Application.Current.MainPage.DisplayAlert("Успех", "Сборка успешно удалена", "OK");
 
-                        // Возвращаемся на предыдущую страницу
-                        await Shell.Current.GoToAsync("..");
-                    }
-                    else
-                    {
-                        // Получаем ответ от сервера в случае ошибки
-                        var errorResponse = await response.Content.ReadAsStringAsync();
+                    // Возвращаемся на предыдущую страницу
+                    await Shell.Current.GoToAsync("..");
+                }
+                else
+                {
+                    // Получаем ответ от сервера в случае ошибки
+                    var errorResponse = await response.Content.ReadAsStringAsync();
 
-                        // Логирование ошибки
-                        Debug.WriteLine($"Error response: {errorResponse}");
+                    // Логирование ошибки
+                    Debug.WriteLine($"Error response: {errorResponse}");
 
-                        // Показать ошибку, если не удалось удалить
-                        await Application.Current.MainPage.DisplayAlert("Ошибка", $"Не удалось удалить сборку. Ответ сервера: {errorResponse}", "OK");
-                    }
+                    // Показать ошибку, если не удалось удалить
+                    await Application.Current.MainPage.DisplayAlert("Ошибка", $"Не удалось удалить сборку. Ответ сервера: {errorResponse}", "OK");
+                }
 
                 }
                 else

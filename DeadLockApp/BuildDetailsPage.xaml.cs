@@ -23,6 +23,6 @@ public partial class BuildDetailsPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.LoadBuildDetailsAsync(BuildId);
+        await _viewModel.LoadBuildDetailsAsync(CharacterId, BuildId);
     }
 }

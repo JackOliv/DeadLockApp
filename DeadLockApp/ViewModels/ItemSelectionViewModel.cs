@@ -9,18 +9,22 @@ using DeadLockApp.Models;
 
 namespace DeadLockApp.ViewModels
 {
+    // ViewModel для страницы выбора предметов
     public class ItemSelectionViewModel : INotifyPropertyChanged
     {
-        private const string ItemsApiUrl = "http://192.168.2.20/api/items"; // URL для API, который предоставляет данные о предметах
+        // URL API для получения предметов
+        private const string ItemsApiUrl = "http://192.168.2.20/api/items";
 
-        // Коллекции для предметов разных категорий
+        // Коллекции для предметов разных категорий (по уровням)
         public ObservableCollection<Item> TierOneItems { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Item> TierTwoItems { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Item> TierThreeItems { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Item> TierFourItems { get; set; } = new ObservableCollection<Item>();
 
-        private List<Item> _items = new List<Item>(); // Все предметы
+        // Лист для хранения всех предметов
+        private List<Item> _items = new List<Item>();
 
+        // Свойство для доступа к списку всех предметов
         public List<Item> Items
         {
             get => _items;
@@ -29,15 +33,16 @@ namespace DeadLockApp.ViewModels
                 if (_items != value)
                 {
                     _items = value;
-                    OnPropertyChanged(nameof(Items)); // Уведомляем об изменении
+                    OnPropertyChanged(nameof(Items)); // Уведомление об изменении свойства
                 }
             }
         }
 
-        public ICommand ChangeCategoryCommand { get; } // Команда для изменения категории
-        private string _selectedCategory; // Выбранная категория
+        // Команды для изменения категории и выбора предмета
+        public ICommand ChangeCategoryCommand { get; }
         public ICommand SelectItemCommand { get; }
 
+        private string _selectedCategory; // Свойство для выбранной категории
         public string SelectedCategory
         {
             get => _selectedCategory;
@@ -46,15 +51,15 @@ namespace DeadLockApp.ViewModels
                 if (_selectedCategory != value)
                 {
                     _selectedCategory = value;
-                    OnPropertyChanged(nameof(SelectedCategory)); // Уведомляем об изменении категории
+                    OnPropertyChanged(nameof(SelectedCategory)); // Уведомление об изменении категории
                 }
             }
         }
 
-        // Конструктор, инициализирующий команду и загружающий данные
-        public ItemSelectionViewModel() 
+        // Конструктор, который инициализирует команды и загружает предметы
+        public ItemSelectionViewModel()
         {
-            SelectItemCommand = new Command<Item>(SelectItem);
+            SelectItemCommand = new Command<Item>(SelectItem); // Инициализация команды выбора предмета
             ChangeCategoryCommand = new Command<string>(ChangeCategory); // Инициализация команды изменения категории
             LoadItemsAsync(); // Загрузка предметов при инициализации
         }
@@ -66,8 +71,8 @@ namespace DeadLockApp.ViewModels
             {
                 var client = new HttpClient(); // Инициализация HTTP клиента
                 var response = await client.GetStringAsync(ItemsApiUrl); // Получение данных с API
-                var data = JsonSerializer.Deserialize<ApiResponse2>(response); // Десериализация ответа
-                return data?.Предметы ?? new List<Item>(); // Возвращаем список предметов или пустой список
+                var data = JsonSerializer.Deserialize<ApiResponse2>(response); // Десериализация ответа в объект
+                return data?.Предметы ?? new List<Item>(); // Возвращаем список предметов или пустой список в случае ошибки
             }
             catch (Exception ex)
             {
@@ -76,23 +81,23 @@ namespace DeadLockApp.ViewModels
             }
         }
 
-        // Метод для изменения категории
+        // Метод для изменения категории и обновления отображаемых предметов
         private void ChangeCategory(string category)
         {
             SelectedCategory = category; // Устанавливаем выбранную категорию
-            UpdateFilteredItems(category); // Обновляем отображаемые предметы
+            UpdateFilteredItems(category); // Обновляем список отображаемых предметов
         }
 
-        // Обновление предметов в зависимости от выбранной категории
+        // Метод для обновления списка предметов в зависимости от выбранной категории
         private void UpdateFilteredItems(string category)
         {
-            // Очищаем коллекции для предметов разных категорий
+            // Очищаем коллекции для разных категорий
             TierOneItems.Clear();
             TierTwoItems.Clear();
             TierThreeItems.Clear();
             TierFourItems.Clear();
 
-            // Добавляем предметы в соответствующие коллекции по их категориям и уровням
+            // Добавляем предметы в соответствующие коллекции в зависимости от их уровня и типа
             foreach (var item in Items.Where(x => x.Type_id == GetTypeIdFromCategory(category)))
             {
                 switch (item.Tier_id)
@@ -104,15 +109,14 @@ namespace DeadLockApp.ViewModels
                 }
             }
 
-            // Уведомляем об изменении коллекций
+            // Уведомляем об изменении всех коллекций
             OnPropertyChanged(nameof(TierOneItems));
             OnPropertyChanged(nameof(TierTwoItems));
             OnPropertyChanged(nameof(TierThreeItems));
             OnPropertyChanged(nameof(TierFourItems));
         }
 
-
-        // Метод для получения идентификатора типа предмета по категории
+        // Метод для получения идентификатора типа предмета на основе выбранной категории
         private int GetTypeIdFromCategory(string category)
         {
             return category switch
@@ -127,45 +131,59 @@ namespace DeadLockApp.ViewModels
         // Асинхронный метод для загрузки предметов и их обработки
         public async void LoadItemsAsync()
         {
-            var items = await FetchItemsAsync(); // Получаем предметы с API
+            var items = await FetchItemsAsync(); // Получаем список предметов с API
 
-            // Устанавливаем изображение для каждого предмета
+            // Устанавливаем URL изображения для каждого предмета
             foreach (var item in items)
             {
-                item.Image = $"http://192.168.2.20/public/storage/{item.Image}";
+                item.Image = $"http://192.168.2.20/public/storage/{item.Image}"; // Формируем полный путь к изображению
             }
 
-            Items = items; // Заполняем список предметов
-            UpdateFilteredItems("Weapon"); // Обновляем отображаемые предметы по умолчанию (Оружие)
+            Items = items; // Заполняем список всех предметов
+            UpdateFilteredItems("Weapon"); // По умолчанию отображаем предметы категории "Оружие"
         }
 
-        public event PropertyChangedEventHandler PropertyChanged; // Событие для уведомления об изменении свойств
+        // Событие для уведомления об изменении свойств
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        // Метод для уведомления об изменении свойства
+        // Метод для вызова события изменения свойства
         protected void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); // Вызываем событие изменения свойства
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); // Уведомляем подписчиков
         }
+
+        // Метод для выбора предмета и добавления его в билд
         private async void SelectItem(Item item)
         {
             if (item == null) return;
 
+            // Проверяем текущую страницу и находим нужную часть билда (через PartId)
             if (Shell.Current.CurrentPage is ItemSelectionPage selectionPage)
             {
                 int partId = selectionPage.PartId;
 
-                // Получаем ViewModel страницы создания билда
+                // Добавляем предмет в билд на странице создания билда
                 if (Shell.Current.Navigation.NavigationStack.FirstOrDefault(p => p is BuildCreatePage) is BuildCreatePage buildPage)
                 {
                     if (buildPage.BindingContext is BuildCreateViewModel buildViewModel)
                     {
-                        buildViewModel.AddItemToBuild(item, partId);
+                        buildViewModel.AddItemToBuild(item, partId); // Добавляем предмет в билд
+                    }
+                }
+
+                // Добавляем предмет в билд на странице редактирования билда
+                if (Shell.Current.Navigation.NavigationStack.FirstOrDefault(p => p is BuildEditPage) is BuildEditPage editPage)
+                {
+                    if (editPage.BindingContext is BuildEditViewModel buildViewModel)
+                    {
+                        buildViewModel.AddItemToBuild(item, partId); // Добавляем предмет в билд
                     }
                 }
             }
 
-            await Shell.Current.Navigation.PopAsync(); // Закрываем страницу выбора предмета
+            // Закрываем страницу выбора предмета
+            await Shell.Current.GoToAsync("..");
+
         }
     }
-
 }
