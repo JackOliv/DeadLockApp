@@ -11,6 +11,9 @@
 
     <ScrollView>
         <VerticalStackLayout>
+            <Label Text="Выберите предмет" 
+Style="{StaticResource HeaderStyle}" 
+HorizontalOptions="Center" />
             <!-- Кнопки для выбора категории -->
             <HorizontalStackLayout Spacing="10" Margin="10" Padding="5" HorizontalOptions="Center">
                 <!-- Weapon -->

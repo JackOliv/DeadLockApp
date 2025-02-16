@@ -12,6 +12,9 @@
         
     <VerticalStackLayout>
         <!-- Кнопки для выбора категории -->
+            <Label Text="Предметы Deadlock" 
+        Style="{StaticResource HeaderStyle}" 
+        HorizontalOptions="Center" />
             <HorizontalStackLayout Spacing="10" Margin="10" Padding="5" HorizontalOptions="Center">
                 <!-- Weapon -->
                 <Button Text="Weapon"
