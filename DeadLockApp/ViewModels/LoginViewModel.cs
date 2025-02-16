@@ -89,13 +89,11 @@ namespace DeadLockApp.ViewModels
                 IsErrorVisible = true;
                 return;
             }
-
             // Пример запроса к API
             var isSuccess = await AuthenticateUserAsync(Username, Password);
             if (isSuccess)
             {
-                // Перенаправление на BuildCreatePage
-                await Shell.Current.GoToAsync(nameof(BuildCreatePage)); // Переход на BuildCreatePage
+                await Shell.Current.GoToAsync("..");
                 IsErrorVisible = true;
                 ErrorMessage = "Успешно вошел";
             }

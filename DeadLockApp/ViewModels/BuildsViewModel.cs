@@ -6,76 +6,80 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DeadLockApp.Models;
-
 namespace DeadLockApp.ViewModels
 {
     public class BuildsViewModel : BaseViewModel
     {
-        private const string ApiUrl = "http://192.168.2.20/api/character/{0}/builds"; // URL для API, который предоставляет информацию о билдах
-
-        public ObservableCollection<Build> Builds { get; set; } = new(); // Коллекция билдов для привязки
-        public Build SelectedBuild { get; set; } // Выбранный билд
-        public ICommand CreateBuildCommand { get; } // Команда для создания нового билда
-
+        // URL для API, который предоставляет информацию о билдах
+        private const string ApiUrl = "http://192.168.2.20/api/character/{0}/builds"; 
+        // Коллекция билдов для привязки
+        public ObservableCollection<Build> Builds { get; set; } = new(); 
+        // Выбранный билд
+        public Build SelectedBuild { get; set; } 
+        // Команда для создания нового билда
+        public ICommand CreateBuildCommand { get; } 
         public BuildsViewModel()
         {
-            CreateBuildCommand = new Command(CreateBuild); // Инициализация команды для создания билда
+            // Инициализация команды для создания билда
+            CreateBuildCommand = new Command(CreateBuild); 
         }
-
         // Асинхронный метод для загрузки билдов из API по ID персонажа
         public async Task LoadBuildsAsync(int characterId)
         {
             try
             {
-                string url = string.Format(ApiUrl, characterId); // Формируем URL для API-запроса
-
-                using HttpClient client = new(); // Инициализируем HTTP клиент
-                string response = await client.GetStringAsync(url); // Получаем строку ответа от API
-
-                var data = JsonSerializer.Deserialize<BuildResponse>(response); // Десериализуем данные в объект BuildResponse
-
-                if (data != null && data.Builds != null) // Проверяем, что данные были успешно загружены
+                // Формируем URL для API-запроса
+                string url = string.Format(ApiUrl, characterId); 
+                // Инициализируем HTTP клиент
+                using HttpClient client = new(); 
+                // Получаем строку ответа от API
+                string response = await client.GetStringAsync(url); 
+                // Десериализуем данные в объект BuildResponse
+                var data = JsonSerializer.Deserialize<BuildResponse>(response); 
+                // Проверяем, что данные были успешно загружены
+                if (data != null && data.Builds != null) 
                 {
                     // Очистить коллекцию перед загрузкой новых данных
                     Debug.WriteLine($"Loaded {Builds.Count} builds before adding new data.");
-                    Builds.Clear(); // Очищаем текущие данные в коллекции билдов
-
+                    // Очищаем текущие данные в коллекции билдов
+                    Builds.Clear(); 
                     // Добавить только новые данные, проверяя на дубли
                     foreach (var build in data.Builds)
                     {
-                        if (!Builds.Any(b => b.Id == build.Id)) // Проверка на дубли по ID билда
+                        // Проверка на дубли по ID билда
+                        if (!Builds.Any(b => b.Id == build.Id)) 
                         {
                             Debug.WriteLine($"Adding build: {build.Name}");
-                            Builds.Add(build); // Добавляем билд в коллекцию
+                            // Добавляем билд в коллекцию
+                            Builds.Add(build); 
                         }
                     }
                     Debug.WriteLine($"Loaded {Builds.Count} builds after adding data.");
                 }
                 else
                 {
-                    Debug.WriteLine("No builds found or failed to parse data."); // Логирование при отсутствии данных
+                    // Логирование при отсутствии данных
+                    Debug.WriteLine("No builds found or failed to parse data."); 
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error in LoadBuildsAsync: {ex.Message}"); // Логирование ошибки при загрузке данных
+                // Логирование ошибки при загрузке данных
+                Debug.WriteLine($"Error in LoadBuildsAsync: {ex.Message}"); 
             }
         }
-
         // Событие для уведомления об изменении свойства
         public event PropertyChangedEventHandler PropertyChanged;
-
         // Метод для уведомления об изменении свойства
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); // Вызываем событие изменения свойства
+            // Вызываем событие изменения свойства
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); 
         }
-
         // Метод для создания нового билда
         private void CreateBuild()
         {
-            Debug.WriteLine("CreateBuild command executed."); // Логирование вызова команды
-            // Реализуйте переход на страницу создания билдов или логику
+            Debug.WriteLine("CreateBuild command executed.");
         }
     }
 }
