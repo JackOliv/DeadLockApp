@@ -7,8 +7,6 @@
     TabBarUnselectedColor="#ada58c"
     TabBarDisabledColor="#ada58c"
     TabBarTitleColor="#efdfc0">
-
-
     <TabBar>
         <Tab Title="Главная" Icon="home_icon.png">
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}" />
