@@ -2,22 +2,25 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:DeadLockApp.ViewModels"
-             x:Class="DeadLockApp.LoginPage"
+             x:Class="DeadLockApp.RegisterPage"
              BackgroundColor="#2b2923">
     <VerticalStackLayout Padding="30" Spacing="20" VerticalOptions="Center">
-        <Label Text="Введите логин и пароль" FontSize="18" HorizontalOptions="Center" />
+        <Label Text="Регистрация" FontSize="18" HorizontalOptions="Center" />
 
         <!-- Поле для логина -->
         <Entry Placeholder="Логин" Text="{Binding Username}" />
 
+        <!-- Поле для имени -->
+        <Entry Placeholder="Имя" Text="{Binding Name}" />
+
         <!-- Поле для пароля -->
         <Entry Placeholder="Пароль" Text="{Binding Password}" IsPassword="True" />
 
-        <!-- Кнопка входа -->
-        <Button Text="Войти" Command="{Binding LoginCommand}" />
+        <!-- Подтверждение пароля -->
+        <Entry Placeholder="Подтвердите пароль" Text="{Binding PasswordConfirmation}" IsPassword="True" />
 
         <!-- Кнопка регистрации -->
-        <Button Text="Регистрация" Command="{Binding RegisterCommand}" />
+        <Button Text="Зарегистрироваться" Command="{Binding RegisterCommand}" />
 
         <!-- Текст ошибки -->
         <Label Text="{Binding ErrorMessage}" TextColor="Red" IsVisible="{Binding IsErrorVisible}" />

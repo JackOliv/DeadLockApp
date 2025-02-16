@@ -8,6 +8,7 @@ namespace DeadLockApp
         {
             InitializeComponent();
             Shell.SetBackgroundColor(this, Color.FromArgb("#23221e"));
+            Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
             Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
             Routing.RegisterRoute(nameof(BuildsPage), typeof(BuildsPage));

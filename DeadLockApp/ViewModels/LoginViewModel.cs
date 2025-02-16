@@ -67,12 +67,18 @@ namespace DeadLockApp.ViewModels
         }
 
         public ICommand LoginCommand { get; }
+        public ICommand RegisterCommand { get; }
 
         public LoginViewModel()
         {
             LoginCommand = new Command(async () => await LoginAsync());
+            RegisterCommand = new Command(async () => await RegisterAsync());
         }
 
+        private async Task RegisterAsync()
+        {
+            await Shell.Current.GoToAsync(nameof(RegisterPage));
+        }
         private async Task LoginAsync()
         {
             IsErrorVisible = false;
