@@ -179,8 +179,6 @@ namespace DeadLockApp.ViewModels
                 await Shell.Current.GoToAsync($"{nameof(BuildEditPage)}?build={Uri.EscapeDataString(serializedBuild)}");
             }
         }
-
-
         private async Task DeleteBuildAsync()
         {
             try
