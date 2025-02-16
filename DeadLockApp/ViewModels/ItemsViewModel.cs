@@ -6,21 +6,19 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DeadLockApp.Models;
-
 namespace DeadLockApp.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private const string ItemsApiUrl = "http://192.168.2.20/api/items"; // URL для API, который предоставляет данные о предметах
-
+        // URL для API, который предоставляет данные о предметах
+        private const string ItemsApiUrl = "http://192.168.2.20/api/items"; 
         // Коллекции для предметов разных категорий
         public ObservableCollection<Item> TierOneItems { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Item> TierTwoItems { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Item> TierThreeItems { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Item> TierFourItems { get; set; } = new ObservableCollection<Item>();
-
-        private List<Item> _items = new List<Item>(); // Все предметы
-
+        // Все предметы
+        private List<Item> _items = new List<Item>(); 
         public List<Item> Items
         {
             get => _items;
@@ -29,14 +27,16 @@ namespace DeadLockApp.ViewModels
                 if (_items != value)
                 {
                     _items = value;
-                    OnPropertyChanged(nameof(Items)); // Уведомляем об изменении
+                    // Уведомляем об изменении
+                    OnPropertyChanged(nameof(Items)); 
                 }
             }
         }
-
-        public ICommand ChangeCategoryCommand { get; } // Команда для изменения категории
+        // Команда для изменения категории
+        public ICommand ChangeCategoryCommand { get; } 
         public ICommand ShowItemDetailsCommand { get; }
-        private string _selectedCategory; // Выбранная категория
+        // Выбранная категория
+        private string _selectedCategory; 
         public string SelectedCategory
         {
             get => _selectedCategory;
@@ -45,43 +45,50 @@ namespace DeadLockApp.ViewModels
                 if (_selectedCategory != value)
                 {
                     _selectedCategory = value;
-                    OnPropertyChanged(nameof(SelectedCategory)); // Уведомляем об изменении категории
+                    // Уведомляем об изменении категории
+                    OnPropertyChanged(nameof(SelectedCategory)); 
                 }
             }
         }
-
         // Конструктор, инициализирующий команду и загружающий данные
         public ItemsViewModel()
         {
             ShowItemDetailsCommand = new Command<int>(async (itemId) => await OpenItemDetails(itemId));
-            ChangeCategoryCommand = new Command<string>(ChangeCategory); // Инициализация команды изменения категории
-            LoadItemsAsync(); // Загрузка предметов при инициализации
+            // Инициализация команды изменения категории
+            ChangeCategoryCommand = new Command<string>(ChangeCategory); 
+            // Загрузка предметов при инициализации
+            LoadItemsAsync(); 
         }
-
         // Асинхронный метод для получения данных о предметах с API
         public async Task<List<Item>> FetchItemsAsync()
         {
             try
             {
-                var client = new HttpClient(); // Инициализация HTTP клиента
-                var response = await client.GetStringAsync(ItemsApiUrl); // Получение данных с API
-                var data = JsonSerializer.Deserialize<ApiResponse2>(response); // Десериализация ответа
-                return data?.Предметы ?? new List<Item>(); // Возвращаем список предметов или пустой список
+                // Инициализация HTTP клиента
+                var client = new HttpClient(); 
+                // Получение данных с API
+                var response = await client.GetStringAsync(ItemsApiUrl); 
+                // Десериализация ответа
+                var data = JsonSerializer.Deserialize<ApiResponse2>(response); 
+                // Возвращаем список предметов или пустой список
+                return data?.Предметы ?? new List<Item>(); 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading items: {ex.Message}"); // Логирование ошибки
-                return new List<Item>(); // Возвращаем пустой список при ошибке
+                // Логирование ошибки
+                Console.WriteLine($"Error loading items: {ex.Message}"); 
+                // Возвращаем пустой список при ошибке
+                return new List<Item>(); 
             }
         }
-
         // Метод для изменения категории
         private void ChangeCategory(string category)
         {
-            SelectedCategory = category; // Устанавливаем выбранную категорию
-            UpdateFilteredItems(category); // Обновляем отображаемые предметы
+            // Устанавливаем выбранную категорию
+            SelectedCategory = category; 
+            // Обновляем отображаемые предметы
+            UpdateFilteredItems(category); 
         }
-
         // Обновление предметов в зависимости от выбранной категории
         private void UpdateFilteredItems(string category)
         {
@@ -90,7 +97,6 @@ namespace DeadLockApp.ViewModels
             TierTwoItems.Clear();
             TierThreeItems.Clear();
             TierFourItems.Clear();
-
             // Добавляем предметы в соответствующие коллекции по их категориям и уровням
             foreach (var item in Items.Where(x => x.Type_id == GetTypeIdFromCategory(category)))
             {
@@ -102,58 +108,53 @@ namespace DeadLockApp.ViewModels
                     case 4: TierFourItems.Add(item); break;
                 }
             }
-
             // Уведомляем об изменении коллекций
             OnPropertyChanged(nameof(TierOneItems));
             OnPropertyChanged(nameof(TierTwoItems));
             OnPropertyChanged(nameof(TierThreeItems));
             OnPropertyChanged(nameof(TierFourItems));
         }
-        
-
         // Метод для получения идентификатора типа предмета по категории
         private int GetTypeIdFromCategory(string category)
         {
             return category switch
             {
-                "Weapon" => 1, // Оружие
-                "Vitality" => 2, // Жизненная сила
-                "Spirit" => 3, // Дух
-                _ => 0, // По умолчанию
+                // Оружие
+                "Weapon" => 1, 
+                // Жизненная сила
+                "Vitality" => 2, 
+                // Дух
+                "Spirit" => 3, 
+                // По умолчанию
+                _ => 0, 
             };
         }
-
         // Асинхронный метод для загрузки предметов и их обработки
         public async void LoadItemsAsync()
         {
-            var items = await FetchItemsAsync(); // Получаем предметы с API
-
+            // Получаем предметы с API
+            var items = await FetchItemsAsync(); 
             // Устанавливаем изображение для каждого предмета
             foreach (var item in items)
             {
                 item.Image = $"http://192.168.2.20/public/storage/{item.Image}";
             }
-
-            Items = items; // Заполняем список предметов
-            UpdateFilteredItems("Weapon"); // Обновляем отображаемые предметы по умолчанию (Оружие)
+            // Заполняем список предметов
+            Items = items; 
+            // Обновляем отображаемые предметы по умолчанию (Оружие)
+            UpdateFilteredItems("Weapon"); 
         }
-
-        public event PropertyChangedEventHandler PropertyChanged; // Событие для уведомления об изменении свойств
-
+        // Событие для уведомления об изменении свойств
+        public event PropertyChangedEventHandler PropertyChanged; 
         // Метод для уведомления об изменении свойства
         protected void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); // Вызываем событие изменения свойства
+            // Вызываем событие изменения свойства
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); 
         }
-
-
-  
-
-
         private async Task OpenItemDetails(int itemId)
         {
             Debug.WriteLine($"Открываю предмет с ID: {itemId}");
-
             if (itemId > 0)
             {
                 await Shell.Current.GoToAsync($"ItemDetailsPage?itemId={itemId}", true);

@@ -12,65 +12,73 @@ namespace DeadLockApp.ViewModels
     public class HeroesViewModel : BaseViewModel
     {
         private const string CharactersApiUrl = "http://192.168.2.20/api/characters";
-
-        private readonly HttpClient _httpClient = new HttpClient(); // Инициализация HTTP клиента
-
-        public ObservableCollection<Character> Characters { get; set; } = new ObservableCollection<Character>(); // Коллекция персонажей для привязки
-        public Character SelectedCharacter { get; set; } // Выбранный персонаж
+        // Инициализация HTTP клиента
+        private readonly HttpClient _httpClient = new HttpClient(); 
+        // Коллекция персонажей для привязки
+        public ObservableCollection<Character> Characters { get; set; } = new ObservableCollection<Character>(); 
+        // Выбранный персонаж
+        public Character SelectedCharacter { get; set; } 
         public HeroesViewModel()
         {
-            _ = LoadCharactersAsync(); // Загружаем персонажей асинхронно при инициализации ViewModel
+            // Загружаем персонажей асинхронно при инициализации ViewModel
+            _ = LoadCharactersAsync(); 
         }
-
         // Асинхронный метод для получения списка персонажей из API
         private async Task<List<Character>> FetchCharactersAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                var response = await _httpClient.GetStringAsync(CharactersApiUrl, cancellationToken); // Получаем строку ответа от API
-                var data = JsonSerializer.Deserialize<ApiResponse>(response); // Десериализуем ответ
-                return data?.Персонажи ?? new List<Character>(); // Возвращаем список персонажей, если он есть, или пустой список
+                // Получаем строку ответа от API
+                var response = await _httpClient.GetStringAsync(CharactersApiUrl, cancellationToken);
+                // Десериализуем ответ
+                var data = JsonSerializer.Deserialize<ApiResponse>(response);
+                // Возвращаем список персонажей, если он есть, или пустой список
+                return data?.Персонажи ?? new List<Character>(); 
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error fetching characters: {ex.Message}"); // Логирование ошибки при получении данных
-                return new List<Character>(); // Возвращаем пустой список в случае ошибки
+                // Логирование ошибки при получении данных
+                Debug.WriteLine($"Error fetching characters: {ex.Message}"); 
+                // Возвращаем пустой список в случае ошибки
+                return new List<Character>(); 
             }
         }
-
         // Асинхронный метод для загрузки и обработки персонажей
         private async Task LoadCharactersAsync()
         {
             try
             {
-                var characters = await FetchCharactersAsync(); // Загружаем персонажей
-
-                if (characters != null && characters.Any()) // Проверка на успешную загрузку персонажей
+                // Загружаем персонажей
+                var characters = await FetchCharactersAsync();
+                // Проверка на успешную загрузку персонажей
+                if (characters != null && characters.Any()) 
                 {
-                    Characters.Clear(); // Очищаем текущий список персонажей
+                    // Очищаем текущий список персонажей
+                    Characters.Clear(); 
                     foreach (var character in characters)
                     {
-                        character.Image = $"http://192.168.2.20/storage/{character.Image}"; // Формируем полный путь для изображения
-                        Characters.Add(character); // Добавляем персонажа в коллекцию
-                        Debug.WriteLine($"Loaded: {character.Image}"); // Логирование загруженного персонажа
+                        // Формируем полный путь для изображения
+                        character.Image = $"http://192.168.2.20/storage/{character.Image}";
+                        // Добавляем персонажа в коллекцию
+                        Characters.Add(character);
+                        // Логирование загруженного персонажа
+                        Debug.WriteLine($"Loaded: {character.Image}"); 
                     }
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error loading characters: {ex.Message}"); // Логирование ошибки при загрузке персонажей
+                // Логирование ошибки при загрузке персонажей
+                Debug.WriteLine($"Error loading characters: {ex.Message}"); 
             }
         }
-
         // Метод для сброса выбранного персонажа
         public void ResetSelectedCharacter()
         {
             SelectedCharacter = null; // Сбрасываем выбор персонажа
         }
-
         // Событие изменения свойства для привязки данных
         public event PropertyChangedEventHandler PropertyChanged;
-
         // Метод для уведомления об изменении свойства
         protected void OnPropertyChanged(string propertyName)
         {

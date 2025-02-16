@@ -9,8 +9,7 @@
         <vm:ItemsViewModel />
     </ContentPage.BindingContext>
     <ScrollView>
-        
-    <VerticalStackLayout>
+        <VerticalStackLayout>
         <!-- Кнопки для выбора категории -->
             <Label Text="Предметы Deadlock" 
         Style="{StaticResource HeaderStyle}" 
@@ -28,7 +27,6 @@
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
-
                 <!-- Vitality -->
                 <Button Text="Vitality"
                         Command="{Binding ChangeCategoryCommand}"
@@ -41,7 +39,6 @@
                         </DataTrigger>
                     </Button.Triggers>
                 </Button>
-
                 <!-- Spirit -->
                 <Button Text="Spirit"
                         Command="{Binding ChangeCategoryCommand}"
@@ -55,7 +52,6 @@
                     </Button.Triggers>
                 </Button>
             </HorizontalStackLayout>
-
             <!-- Группы по тирам -->
             <ScrollView>
                 <VerticalStackLayout HorizontalOptions="Center">
@@ -80,45 +76,42 @@
                               CommandParameter="{Binding Id}" />
                                     </Frame.GestureRecognizers>
                                 </Frame>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                    <!-- Группа II -->
+                    <Label Text="II" FontSize="24" TextColor="#35b093" Margin="0,10,0,5" HorizontalOptions="Center"/>
+                    <FlexLayout Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Direction="Row" Margin="8,0,0,0">
+                        <BindableLayout.ItemsSource>
+                            <x:Binding Path="TierTwoItems" />
+                        </BindableLayout.ItemsSource>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="125" BackgroundColor="#3e3b36">
+                                    <VerticalStackLayout>
+                                        <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFit" />
+                                        <HorizontalStackLayout HorizontalOptions="Center">
+                                            <Image Source="souls.png" WidthRequest="10" HeightRequest="16" />
+                                            <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" />
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ItemsPage}, Path=BindingContext.ShowItemDetailsCommand}"
+                              CommandParameter="{Binding Id}" />
+                                    </Frame.GestureRecognizers>
+                                </Frame>
 
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </FlexLayout>
-
-                    <!-- Группа II -->
-                    <Label Text="II" FontSize="24" TextColor="#35b093" Margin="0,10,0,5" HorizontalOptions="Center"/>
-                    <FlexLayout Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Direction="Row" Margin="8,0,0,0">
-                    <BindableLayout.ItemsSource>
-                        <x:Binding Path="TierTwoItems" />
-                    </BindableLayout.ItemsSource>
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                                <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="125" BackgroundColor="#3e3b36">
-                                    <VerticalStackLayout>
-                                        <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFit" />
-                                        <HorizontalStackLayout HorizontalOptions="Center">
-                                            <Image Source="souls.png" WidthRequest="10" HeightRequest="16" />
-                                            <Label Text="{Binding Cost}" FontSize="14" TextColor="#47fdd3" />
-                                        </HorizontalStackLayout>
-                                    </VerticalStackLayout>
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding Source={x:Reference ItemsPage}, Path=BindingContext.ShowItemDetailsCommand}"
-                              CommandParameter="{Binding Id}" />
-                                    </Frame.GestureRecognizers>
-                                </Frame>
-
-                            </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </FlexLayout>
-
-                <!-- Группа III -->
+                    <!-- Группа III -->
                     <Label Text="III" FontSize="24" TextColor="#47b59b" Margin="0,10,0,5" HorizontalOptions="Center"/>
                     <FlexLayout Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Direction="Row" Margin="8,0,0,0">
                         <BindableLayout.ItemsSource>
                             <x:Binding Path="TierThreeItems" />
-                    </BindableLayout.ItemsSource>
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
+                        </BindableLayout.ItemsSource>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
                                 <Frame Padding="2" Margin="1" WidthRequest="90" HeightRequest="125" BackgroundColor="#3e3b36">
                                     <VerticalStackLayout>
                                         <Image Source="{Binding Image}" WidthRequest="100" HeightRequest="100" Aspect="AspectFit" />
@@ -132,12 +125,10 @@
                               CommandParameter="{Binding Id}" />
                                     </Frame.GestureRecognizers>
                                 </Frame>
-
                             </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </FlexLayout>
-
-                <!-- Группа IV -->
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                    <!-- Группа IV -->
                     <Label Text="IV" FontSize="24" TextColor="#24b391" Margin="0,10,0,5" HorizontalOptions="Center"/>
                     <FlexLayout Wrap="Wrap" JustifyContent="Start" AlignItems="Start" Direction="Row" Margin="8,0,0,0">
                     <BindableLayout.ItemsSource>
@@ -158,7 +149,6 @@
                               CommandParameter="{Binding Id}" />
                                     </Frame.GestureRecognizers>
                                 </Frame>
-
                             </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </FlexLayout>
