@@ -7,14 +7,12 @@
     <ContentPage.BindingContext>
         <vm:BuildCreateViewModel />
     </ContentPage.BindingContext>
-
     <ScrollView>
         <VerticalStackLayout>
             <!-- Заголовок -->
             <Entry Text="{Binding BuildName}" Placeholder="Введите название билда"
                    FontSize="24" TextColor="#efdfc0" HorizontalOptions="Center"
                    BackgroundColor="Transparent" />
-
             <!-- Отображение категорий -->
             <Label Text="Начало" FontSize="24" TextColor="#35b093" Margin="0,10,0,5" />
             <FlexLayout Wrap="Wrap" JustifyContent="Start">
@@ -39,7 +37,6 @@
                 </BindableLayout.ItemTemplate>
             </FlexLayout>
             <Button Text="Добавить предмет" Command="{Binding AddStartItemCommand}" BackgroundColor="#3e3b36" TextColor="White" WidthRequest="350" Margin="0,10,0,10"/>
-
             <Label Text="Середина" FontSize="24" TextColor="#35b093" Margin="0,10,0,5" />
             <FlexLayout Wrap="Wrap" JustifyContent="Start">
                 <BindableLayout.ItemsSource>
@@ -63,7 +60,6 @@
                 </BindableLayout.ItemTemplate>
             </FlexLayout>
             <Button Text="Добавить предмет" Command="{Binding AddMiddleItemCommand}" BackgroundColor="#3e3b36" TextColor="White" WidthRequest="350" Margin="0,10,0,10"/>
-
             <Label Text="Конец" FontSize="24" TextColor="#35b093" Margin="0,10,0,5" />
             <FlexLayout Wrap="Wrap" JustifyContent="Start">
                 <BindableLayout.ItemsSource>
@@ -87,7 +83,6 @@
                 </BindableLayout.ItemTemplate>
             </FlexLayout>
             <Button Text="Добавить предмет" Command="{Binding AddEndItemCommand}" BackgroundColor="#3e3b36" TextColor="White" WidthRequest="350" Margin="0,10,0,10" />
-
             <Label Text="Ситуативные" FontSize="24" TextColor="#35b093" Margin="0,10,0,5" />
             <FlexLayout Wrap="Wrap" JustifyContent="Start">
                 <BindableLayout.ItemsSource>
@@ -111,7 +106,6 @@
                 </BindableLayout.ItemTemplate>
             </FlexLayout>
             <Button Text="Добавить предмет" Command="{Binding AddSituationalItemCommand}" BackgroundColor="#3e3b36" TextColor="White" WidthRequest="350" Margin="0,10,0,10" />
-
             <Button Text="Сохранить билд" Command="{Binding SaveBuildCommand}" BackgroundColor="#35b093" TextColor="White" WidthRequest="300" Margin="0,30,0,10"/>
         </VerticalStackLayout>
     </ScrollView>

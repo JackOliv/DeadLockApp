@@ -22,8 +22,6 @@ namespace DeadLockApp.ViewModels
                 }
             }
         }
-
-
         private string _password;
         public string Password
         {
@@ -37,7 +35,6 @@ namespace DeadLockApp.ViewModels
                 }
             }
         }
-
         private string _errorMessage;
         public string ErrorMessage
         {
@@ -51,7 +48,6 @@ namespace DeadLockApp.ViewModels
                 }
             }
         }
-
         private bool _isErrorVisible;
         public bool IsErrorVisible
         {
@@ -65,10 +61,8 @@ namespace DeadLockApp.ViewModels
                 }
             }
         }
-
         public ICommand LoginCommand { get; }
         public ICommand RegisterCommand { get; }
-
         public LoginViewModel()
         {
             LoginCommand = new Command(async () => await LoginAsync());
@@ -82,14 +76,12 @@ namespace DeadLockApp.ViewModels
         private async Task LoginAsync()
         {
             IsErrorVisible = false;
-
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
                 ErrorMessage = "Пожалуйста, введите логин и пароль.";
                 IsErrorVisible = true;
                 return;
             }
-            // Пример запроса к API
             var isSuccess = await AuthenticateUserAsync(Username, Password);
             if (isSuccess)
             {
@@ -108,30 +100,23 @@ namespace DeadLockApp.ViewModels
             {
                 using var httpClient = new HttpClient();
                 var url = "http://192.168.2.20/public/api/login";
-
                 var content = new StringContent(
                     JsonSerializer.Serialize(new { login, password }),
                     Encoding.UTF8,
                     "application/json"
                 );
-
                 var response = await httpClient.PostAsync(url, content);
                 var responseContent = await response.Content.ReadAsStringAsync();
-
                 Debug.WriteLine($"Response StatusCode: {response.StatusCode}");
                 Debug.WriteLine($"Response Content: {responseContent}");
-
                 var result = JsonSerializer.Deserialize<LoginResponse>(responseContent);
-
                 if (result == null || string.IsNullOrEmpty(result.Token))
                 {
                     ErrorMessage = "Ошибка: Некорректный ответ сервера.";
                     Debug.WriteLine(ErrorMessage);
                     return false;
                 }
-
                 await SecureStorage.SetAsync("auth_token", result.Token);
-
                 if (result.User != null) // Проверяем, есть ли user
                 {
                     await SecureStorage.SetAsync("role_code", result.User.RoleCode ?? "");
@@ -143,7 +128,6 @@ namespace DeadLockApp.ViewModels
                     await SecureStorage.SetAsync("test_key", "test_value");
                     var storedValue = await SecureStorage.GetAsync("test_key");
                     Debug.WriteLine($"Stored test_key: {storedValue}");
-
                 }
                 else
                 {
@@ -158,26 +142,20 @@ namespace DeadLockApp.ViewModels
                 return false;
             }
         }
-
         // Класс для десериализации ответа
         public class LoginResponse
         {
             [JsonPropertyName("token")]
             public string Token { get; set; }
-
             [JsonPropertyName("user")]
             public UserDetails? User { get; set; } // Теперь может быть null
-
             public class UserDetails
             {
                 [JsonPropertyName("name")]
                 public string Name { get; set; }
-
                 [JsonPropertyName("role_code")]
                 public string RoleCode { get; set; }
             }
         }
-
-
     }
 }

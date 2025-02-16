@@ -12,7 +12,6 @@ namespace DeadLockApp.ViewModels
         public ObservableCollection<Item> MiddleItems { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Item> EndItems { get; set; } = new ObservableCollection<Item>();
         public ObservableCollection<Item> SituationalItems { get; set; } = new ObservableCollection<Item>();
-
         private string _buildName;
         public string BuildName
         {
@@ -23,14 +22,12 @@ namespace DeadLockApp.ViewModels
                 OnPropertyChanged(nameof(BuildName));
             }
         }
-
         public ICommand AddStartItemCommand { get; }
         public ICommand AddMiddleItemCommand { get; }
         public ICommand AddEndItemCommand { get; }
         public ICommand AddSituationalItemCommand { get; }
         public ICommand RemoveCommand { get; }
         public ICommand SaveBuildCommand { get; }
-
         public BuildCreateViewModel()
         {
             AddStartItemCommand = new Command(() => OpenItemSelection(1));
@@ -40,14 +37,11 @@ namespace DeadLockApp.ViewModels
             RemoveCommand = new Command<Item>(RemoveItem);
             SaveBuildCommand = new Command(SaveBuild);
         }
-
         private async void OpenItemSelection(int partId)
         {
             string route = $"{nameof(ItemSelectionPage)}?partId={partId}";
             await Shell.Current.GoToAsync(route);
         }
-
-
         public void AddItemToBuild(Item item, int partId)
         {
             switch (partId)
@@ -58,7 +52,6 @@ namespace DeadLockApp.ViewModels
                 case 4: SituationalItems.Add(item); break;
             }
         }
-
         private void RemoveItem(Item item)
         {
             StartItems.Remove(item);
@@ -66,7 +59,6 @@ namespace DeadLockApp.ViewModels
             EndItems.Remove(item);
             SituationalItems.Remove(item);
         }
-
         private async void SaveBuild()
         {
             try
@@ -76,33 +68,27 @@ namespace DeadLockApp.ViewModels
                     await Application.Current.MainPage.DisplayAlert("Ошибка", "Введите название билда.", "Ок");
                     return;
                 }
-
                 var token = await SecureStorage.GetAsync("auth_token");
                 if (string.IsNullOrEmpty(token))
                 {
                     await Application.Current.MainPage.DisplayAlert("Ошибка", "Не найден токен авторизации.", "Ок");
                     return;
                 }
-
                 var buildRequest = new
                 {
                     name = BuildName,
                     character_id = Data.CurrentCharacter.Id,
                     items = GetItemsList()
                 };
-
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-
                 var content = new StringContent(
                     JsonSerializer.Serialize(buildRequest),
                     Encoding.UTF8,
                     "application/json"
                 );
-
                 var response = await httpClient.PostAsync("http://192.168.2.20/api/builds/create", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
-
                 if (response.IsSuccessStatusCode)
                 {
                     await Application.Current.MainPage.DisplayAlert("Успех", "Билд сохранен!", "Ок");
@@ -120,7 +106,6 @@ namespace DeadLockApp.ViewModels
         private List<object> GetItemsList()
         {
             var items = new List<object>();
-
             void AddItems(IEnumerable<Item> collection, int partId)
             {
                 foreach (var item in collection)
@@ -128,14 +113,11 @@ namespace DeadLockApp.ViewModels
                     items.Add(new { item_id = item.Id, part = partId });
                 }
             }
-
             AddItems(StartItems, 1);
             AddItems(MiddleItems, 2);
             AddItems(EndItems, 3);
             AddItems(SituationalItems, 4);
-
             return items;
         }
-
     }
 }

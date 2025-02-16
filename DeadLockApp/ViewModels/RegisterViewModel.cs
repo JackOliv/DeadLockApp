@@ -23,7 +23,6 @@ namespace DeadLockApp.ViewModels
                 }
             }
         }
-
         private string _username;
         public string Username
         {
@@ -37,7 +36,6 @@ namespace DeadLockApp.ViewModels
                 }
             }
         }
-
         private string _password;
         public string Password
         {
@@ -51,7 +49,6 @@ namespace DeadLockApp.ViewModels
                 }
             }
         }
-
         private string _passwordConfirmationd;
         public string PasswordConfirmation
         {
@@ -65,7 +62,6 @@ namespace DeadLockApp.ViewModels
                 }
             }
         }
-
         private string _errorMessage;
         public string ErrorMessage
         {
@@ -79,7 +75,6 @@ namespace DeadLockApp.ViewModels
                 }
             }
         }
-
         private bool _isErrorVisible;
         public bool IsErrorVisible
         {
@@ -93,18 +88,14 @@ namespace DeadLockApp.ViewModels
                 }
             }
         }
-
         public ICommand RegisterCommand { get; }
-
         public RegisterViewModel()
         {
             RegisterCommand = new Command(async () => await RegisterAsync());
         }
-
         private async Task RegisterAsync()
         {
             IsErrorVisible = false;
-
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Username) ||
                 string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(PasswordConfirmation))
             {
@@ -112,7 +103,6 @@ namespace DeadLockApp.ViewModels
                 IsErrorVisible = true;
                 return;
             }
-
             if (Username.Length < 3)
             {
                 ErrorMessage = "Логин должен содержать не менее 3 символов.";
@@ -126,14 +116,12 @@ namespace DeadLockApp.ViewModels
                 IsErrorVisible = true;
                 return;
             }
-
             if (Password != PasswordConfirmation)
             {
                 ErrorMessage = "Пароли не совпадают.";
                 IsErrorVisible = true;
                 return;
             }
-
             var isSuccess = await RegisterUserAsync(Name, Username, Password);
             if (isSuccess)
             {
@@ -144,7 +132,6 @@ namespace DeadLockApp.ViewModels
                 IsErrorVisible = true;
             }
         }
-
         private async Task<bool> RegisterUserAsync(string name, string login, string password)
         {
             try
@@ -163,13 +150,10 @@ namespace DeadLockApp.ViewModels
                     Encoding.UTF8,
                     "application/json"
                 );
-
                 var response = await httpClient.PostAsync(url, content);
                 var responseContent = await response.Content.ReadAsStringAsync();
-
                 Debug.WriteLine($"Response StatusCode: {response.StatusCode}");
                 Debug.WriteLine($"Response Content: {responseContent}");
-
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
